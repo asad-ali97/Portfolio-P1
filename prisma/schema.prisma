@@ -1,0 +1,81 @@
+// Prisma schema for the portfolio's backend (Supabase Postgres).
+//
+// Three models, matching the task doc's "Suggested Database Structure"
+// table exactly:
+//   - Profile        (admin user, linked to Supabase Auth by auth_user_id)
+//   - Contact         (Contact Us submissions)
+//   - LoginAttempt     (IP-based login rate limiting)
+//
+// After filling in DATABASE_URL / DIRECT_URL in .env, run:
+//   npx prisma migrate dev --name init
+// to create these tables in your Supabase Postgres database.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  // Pooled connection (pgbouncer, port 6543) — used at runtime by the
+  // serverless functions, which open many short-lived connections.
+  url       = env("DATABASE_URL")
+  // Direct connection (port 5432) — used only for migrations.
+  directUrl = env("DIRECT_URL")
+}
+
+enum Role {
+  admin
+}
+
+enum ContactStatus {
+  pending
+  done
+  completed
+  resolved
+}
+
+/// Admin profile, linked 1:1 with a Supabase Auth user.
+/// Only one row should exist in this project (seeded via
+/// scripts/seed-admin.ts) — see task doc: "Only one user should exist
+/// in the final project, and that user must have the Admin role."
+model Profile {
+  id          String   @id @default(uuid())
+  /// Supabase Auth user id (auth.users.id) — the source of truth for
+  /// login/session; this table just carries the app-level role.
+  authUserId  String   @unique @map("auth_user_id")
+  name        String
+  email       String   @unique
+  role        Role     @default(admin)
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  @@map("profiles")
+}
+
+/// A single Contact Us submission.
+model Contact {
+  id        String        @id @default(uuid())
+  name      String
+  email     String
+  subject   String
+  message   String
+  status    ContactStatus @default(pending)
+  createdAt DateTime      @default(now()) @map("created_at")
+  updatedAt DateTime      @updatedAt @map("updated_at")
+
+  @@map("contacts")
+  @@index([status])
+  @@index([createdAt])
+}
+
+/// Tracks login attempts per IP address for rate limiting the admin
+/// login endpoint (block after more than 5 attempts — see
+/// api/auth/precheck.js).
+model LoginAttempt {
+  id            String    @id @default(uuid())
+  ipAddress     String    @unique @map("ip_address")
+  attempts      Int       @default(0)
+  lastAttemptAt DateTime  @default(now()) @map("last_attempt_at")
+  blockedUntil  DateTime? @map("blocked_until")
+
+  @@map("login_attempts")
+}
