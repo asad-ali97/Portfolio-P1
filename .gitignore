@@ -7,30 +7,39 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
+# Dependencies & build output
 node_modules
 dist
 dist-ssr
 *.local
 
-# Environment variables (EmailJS keys, etc.) — never commit real values
+# Environment variables — never commit real secrets
 .env
 .env.*
 !.env.example
 
-
-# Editor directories and files
+# Editor / OS
 .vscode/*
 !.vscode/extensions.json
 .idea
 .DS_Store
+Thumbs.db
 *.suo
 *.ntvs*
 *.njsproj
 *.sln
 *.sw?
 
+# Vercel local CLI cache
+.vercel
+
 # Local planning / audit docs — keep out of the public GitHub repo
 Plans/
 PROJECT_AUDIT.md
 TODO.md
 Porfolio Projectmd.md
+CHECKLIST.md
+
+# Root resume copies (served copy lives in public/documents/)
+asadali_resume.pdf
+*.resume.pdf

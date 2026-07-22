@@ -4,8 +4,8 @@ import { LayoutDashboard, ListChecks, LogOut } from 'lucide-react'
 import { useAdminAuth } from '@/lib/AdminAuthContext'
 
 const NAV_ITEMS = [
-  { to: '/admin', label: 'Dashboard', icon: LayoutDashboard, end: true },
-  { to: '/admin/queries', label: 'Contact Queries', icon: ListChecks, end: false },
+  { to: '/admin/dashboard', label: 'Dashboard', icon: LayoutDashboard, end: true },
+  { to: '/admin/contacts', label: 'Contact Queries', icon: ListChecks, end: false },
 ]
 
 function AdminLayout({ children }) {

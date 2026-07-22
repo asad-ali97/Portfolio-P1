@@ -36,7 +36,7 @@ function AdminLogin() {
     try {
       const recaptchaToken = await getToken('login')
       await login(values.email.trim(), values.password, recaptchaToken)
-      navigate('/admin', { replace: true })
+      navigate('/admin/dashboard', { replace: true })
     } catch (err) {
       setError(err.message || 'Something went wrong. Please try again.')
     } finally {

@@ -1,4 +1,5 @@
-import { Mail } from 'lucide-react'
+import { Link } from 'react-router-dom'
+import { Mail, Shield } from 'lucide-react'
 import Container from '@/components/ui/Container'
 import Logo from '@/components/ui/Logo'
 import { GithubIcon, LinkedinIcon } from '@/components/ui/icons'
@@ -58,10 +59,18 @@ function Footer() {
         </div>
       </Container>
 
-      <Container className="border-t border-border py-6">
-        <p className="text-center text-xs text-muted">
+      <Container className="flex flex-col items-center justify-between gap-3 border-t border-border py-6 sm:flex-row">
+        <p className="text-center text-xs text-muted sm:text-left">
           © {year} Asad Ali. All rights reserved.
         </p>
+        <Link
+          to="/admin/login"
+          className="inline-flex items-center gap-1.5 text-xs text-muted/70 transition-colors duration-200 hover:text-muted"
+          aria-label="Admin login"
+        >
+          <Shield size={12} aria-hidden="true" />
+          Admin
+        </Link>
       </Container>
     </footer>
   )

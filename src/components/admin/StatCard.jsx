@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types'
 import Card from '@/components/ui/Card'
 
-function StatCard({ label, value, icon: Icon, accent = 'primary' }) {
+function StatCard({ label, value, icon: Icon, accent = 'primary', description }) {
   return (
     <Card hoverable={false} className="flex items-center gap-4">
       <div
@@ -14,6 +14,7 @@ function StatCard({ label, value, icon: Icon, accent = 'primary' }) {
       <div>
         <p className="font-heading text-2xl font-semibold text-text">{value}</p>
         <p className="text-sm text-muted">{label}</p>
+        {description && <p className="mt-0.5 text-xs text-muted/80">{description}</p>}
       </div>
     </Card>
   )
@@ -24,6 +25,7 @@ StatCard.propTypes = {
   value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
   icon: PropTypes.elementType.isRequired,
   accent: PropTypes.oneOf(['primary', 'secondary']),
+  description: PropTypes.string,
 }
 
 export default StatCard
