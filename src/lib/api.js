@@ -23,6 +23,11 @@ export async function apiFetch(path, { method = 'GET', body, auth = false } = {}
   const data = await response.json().catch(() => ({}))
 
   if (!response.ok) {
+    if (response.status === 404) {
+      throw new Error(
+        'Admin API not found (404). /api routes do not run under `npm run dev` — use the deployed Vercel site, or run `npx vercel dev` locally.'
+      )
+    }
     throw new Error(data?.error || `Request failed (${response.status}).`)
   }
 
