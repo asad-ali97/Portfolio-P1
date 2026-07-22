@@ -27,7 +27,7 @@ function validate(values) {
  * 05_project_architecture.md ("Keep business logic separate from UI").
  *
  * Submits to /api/contact, which does its own server-side validation,
- * saves to Supabase via Prisma, and sends a Resend email alert
+ * sends a Resend email alert first, then saves to Supabase via Prisma
  * (Task 4 & 5 of the internship task doc). Client-side validation
  * here is purely for UX — the server never trusts it.
  *

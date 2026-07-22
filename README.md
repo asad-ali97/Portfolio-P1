@@ -136,6 +136,22 @@ RESEND_FROM_EMAIL="Portfolio Contact <onboarding@resend.dev>"
 5. Use a `production` branch for the final submission deploy if required.
 6. Smoke-test the live URL: portfolio → Contact form → Supabase row + email → `/admin/login` → dashboard + queries status update → 6 failed logins (rate limit) → logout.
 
+### Contact form troubleshooting (Vercel)
+
+If the form shows an error on the live site, open **Vercel → Project → Settings → Environment Variables** and confirm **all** of these exist for **Production** (then **Redeploy**):
+
+| Variable | Required for |
+|---|---|
+| `DATABASE_URL` | Saving contacts (use Supabase **Transaction** pooler, port `6543`, with `?pgbouncer=true&connection_limit=1`) |
+| `DIRECT_URL` | Migrations (Supabase session/direct, port `5432`) |
+| `RESEND_API_KEY` | Sending the alert email |
+| `CONTACT_ALERT_EMAIL` | Inbox that receives alerts |
+| `RESEND_FROM_EMAIL` | Sender (sandbox: `Portfolio Contact <onboarding@resend.dev>`) |
+
+Also run migrations once against the real Supabase DB (`npx prisma migrate deploy` locally with those env vars), so the `contacts` table exists.
+
+> With `onboarding@resend.dev`, Resend only delivers to the **email of the Resend account owner**. Put that same address in `CONTACT_ALERT_EMAIL`, or verify your own domain in Resend.
+
 ## Scripts
 
 | Command | What it does |
