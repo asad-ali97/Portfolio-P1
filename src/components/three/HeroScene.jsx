@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { Canvas, useFrame } from '@react-three/fiber'
 import { Float, MeshDistortMaterial } from '@react-three/drei'
 import * as THREE from 'three'
-import { THEME_COLORS } from '@/lib/theme'
+import { getThemeColors } from '@/lib/theme'
 import { PARALLAX_MAX_PX } from '@/lib/motion'
 
 /**
@@ -11,7 +11,7 @@ import { PARALLAX_MAX_PX } from '@/lib/motion'
  * (via <Float>) and tilts a little further toward the pointer — capped
  * well within a "subtle" range, never a full spin-to-follow.
  */
-function DistortedBlob({ reducedMotion }) {
+function DistortedBlob({ reducedMotion, colors }) {
   const meshRef = useRef(null)
 
   useFrame((state) => {
@@ -38,8 +38,8 @@ function DistortedBlob({ reducedMotion }) {
     <mesh ref={meshRef}>
       <icosahedronGeometry args={[1.4, 4]} />
       <MeshDistortMaterial
-        color={THEME_COLORS.primary}
-        emissive={THEME_COLORS.secondary}
+        color={colors.primary}
+        emissive={colors.secondary}
         emissiveIntensity={0.15}
         roughness={0.25}
         metalness={0.4}
@@ -52,6 +52,10 @@ function DistortedBlob({ reducedMotion }) {
 
 DistortedBlob.propTypes = {
   reducedMotion: PropTypes.bool.isRequired,
+  colors: PropTypes.shape({
+    primary: PropTypes.string.isRequired,
+    secondary: PropTypes.string.isRequired,
+  }).isRequired,
 }
 
 /**
@@ -59,14 +63,21 @@ DistortedBlob.propTypes = {
  * fetches an external asset at runtime, an avoidable network
  * dependency for what's otherwise a fully self-hosted site).
  */
-function Lighting() {
+function Lighting({ colors }) {
   return (
     <>
       <ambientLight intensity={0.5} />
-      <pointLight position={[4, 3, 5]} intensity={60} color={THEME_COLORS.secondary} />
-      <pointLight position={[-4, -2, -3]} intensity={40} color={THEME_COLORS.primary} />
+      <pointLight position={[4, 3, 5]} intensity={60} color={colors.secondary} />
+      <pointLight position={[-4, -2, -3]} intensity={40} color={colors.primary} />
     </>
   )
+}
+
+Lighting.propTypes = {
+  colors: PropTypes.shape({
+    primary: PropTypes.string.isRequired,
+    secondary: PropTypes.string.isRequired,
+  }).isRequired,
 }
 
 /**
@@ -74,7 +85,8 @@ function Lighting() {
  * see App-level code splitting) and capped at 2x DPR to keep it cheap
  * on high-density displays, per 11_performance.md ("Optimize 3D").
  */
-function HeroScene({ reducedMotion = false }) {
+function HeroScene({ reducedMotion = false, theme = 'dark' }) {
+  const colors = getThemeColors(theme)
   return (
     <Canvas
       dpr={[1, 2]}
@@ -82,13 +94,13 @@ function HeroScene({ reducedMotion = false }) {
       gl={{ antialias: true, alpha: true }}
       frameloop={reducedMotion ? 'demand' : 'always'}
     >
-      <Lighting />
+      <Lighting colors={colors} />
       <Float
         speed={reducedMotion ? 0 : 1.6}
         rotationIntensity={reducedMotion ? 0 : 0.6}
         floatIntensity={reducedMotion ? 0 : 0.8}
       >
-        <DistortedBlob reducedMotion={reducedMotion} />
+        <DistortedBlob reducedMotion={reducedMotion} colors={colors} />
       </Float>
     </Canvas>
   )
@@ -96,6 +108,7 @@ function HeroScene({ reducedMotion = false }) {
 
 HeroScene.propTypes = {
   reducedMotion: PropTypes.bool,
+  theme: PropTypes.oneOf(['dark', 'light']),
 }
 
 export default HeroScene

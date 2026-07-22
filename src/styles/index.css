@@ -44,7 +44,12 @@
 
   html {
     scroll-behavior: auto; /* Lenis takes over smooth scrolling in JS */
-    color-scheme: dark; /* dark theme only, per design rules */
+    color-scheme: dark; /* default theme; a pre-paint script in index.html
+                           sets data-theme before first render */
+  }
+
+  html[data-theme='light'] {
+    color-scheme: light;
   }
 
   body {
@@ -53,6 +58,9 @@
     font-family: var(--font-body);
     -webkit-font-smoothing: antialiased;
     text-rendering: optimizeLegibility;
+    transition:
+      background-color var(--duration-fade) var(--ease-premium),
+      color var(--duration-fade) var(--ease-premium);
   }
 
   h1, h2, h3, h4, h5, h6 {

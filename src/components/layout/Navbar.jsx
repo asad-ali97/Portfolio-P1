@@ -4,6 +4,7 @@ import { Menu, X } from 'lucide-react'
 import Container from '@/components/ui/Container'
 import Logo from '@/components/ui/Logo'
 import Button from '@/components/ui/Button'
+import ThemeToggle from '@/components/ui/ThemeToggle'
 import { NAV_HEIGHT, NAV_LINKS } from '@/data/navigation'
 import { DURATION, EASE_PREMIUM } from '@/lib/motion'
 import { useActiveSection } from '@/hooks/useActiveSection'
@@ -76,23 +77,27 @@ function Navbar() {
             </ul>
           </nav>
 
-          <div className="hidden md:block">
+          <div className="hidden items-center gap-3 md:flex">
+            <ThemeToggle />
             <Button variant="primary" size="md" onClick={() => goTo('contact')}>
               Let&apos;s talk
             </Button>
           </div>
 
-          {/* Mobile menu trigger */}
-          <button
-            type="button"
-            onClick={() => setIsOpen((prev) => !prev)}
-            aria-expanded={isOpen}
-            aria-controls="mobile-nav"
-            aria-label={isOpen ? 'Close menu' : 'Open menu'}
-            className="inline-flex h-11 w-11 items-center justify-center rounded-full text-text md:hidden"
-          >
-            {isOpen ? <X size={22} aria-hidden="true" /> : <Menu size={22} aria-hidden="true" />}
-          </button>
+          {/* Mobile: theme toggle + menu trigger */}
+          <div className="flex items-center gap-2 md:hidden">
+            <ThemeToggle />
+            <button
+              type="button"
+              onClick={() => setIsOpen((prev) => !prev)}
+              aria-expanded={isOpen}
+              aria-controls="mobile-nav"
+              aria-label={isOpen ? 'Close menu' : 'Open menu'}
+              className="inline-flex h-11 w-11 items-center justify-center rounded-full text-text"
+            >
+              {isOpen ? <X size={22} aria-hidden="true" /> : <Menu size={22} aria-hidden="true" />}
+            </button>
+          </div>
         </Container>
       </div>
 

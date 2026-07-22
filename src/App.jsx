@@ -2,6 +2,7 @@ import { Route, Routes } from 'react-router-dom'
 import { MotionConfig } from 'framer-motion'
 import PortfolioSite from '@/PortfolioSite'
 import { LenisProvider } from '@/lib/LenisContext'
+import { ThemeProvider } from '@/lib/ThemeContext'
 import { AdminAuthProvider } from '@/lib/AdminAuthContext'
 import ProtectedRoute from '@/components/admin/ProtectedRoute'
 import AdminLogin from '@/pages/admin/Login'
@@ -21,45 +22,47 @@ import AdminQueries from '@/pages/admin/Queries'
  */
 function App() {
   return (
-    <MotionConfig reducedMotion="user">
-      <Routes>
-        <Route
-          path="/"
-          element={
-            <LenisProvider>
-              <PortfolioSite />
-            </LenisProvider>
-          }
-        />
+    <ThemeProvider>
+      <MotionConfig reducedMotion="user">
+        <Routes>
+          <Route
+            path="/"
+            element={
+              <LenisProvider>
+                <PortfolioSite />
+              </LenisProvider>
+            }
+          />
 
-        <Route
-          path="/admin/*"
-          element={
-            <AdminAuthProvider>
-              <Routes>
-                <Route path="login" element={<AdminLogin />} />
-                <Route
-                  path=""
-                  element={
-                    <ProtectedRoute>
-                      <AdminDashboard />
-                    </ProtectedRoute>
-                  }
-                />
-                <Route
-                  path="queries"
-                  element={
-                    <ProtectedRoute>
-                      <AdminQueries />
-                    </ProtectedRoute>
-                  }
-                />
-              </Routes>
-            </AdminAuthProvider>
-          }
-        />
-      </Routes>
-    </MotionConfig>
+          <Route
+            path="/admin/*"
+            element={
+              <AdminAuthProvider>
+                <Routes>
+                  <Route path="login" element={<AdminLogin />} />
+                  <Route
+                    path=""
+                    element={
+                      <ProtectedRoute>
+                        <AdminDashboard />
+                      </ProtectedRoute>
+                    }
+                  />
+                  <Route
+                    path="queries"
+                    element={
+                      <ProtectedRoute>
+                        <AdminQueries />
+                      </ProtectedRoute>
+                    }
+                  />
+                </Routes>
+              </AdminAuthProvider>
+            }
+          />
+        </Routes>
+      </MotionConfig>
+    </ThemeProvider>
   )
 }
 

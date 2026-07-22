@@ -54,6 +54,24 @@
   --shadow-card-hover: 0 16px 40px -12px color-mix(in srgb, #000 70%, transparent);
 }
 
+/* ---- Light theme ----
+   Same 4-color discipline, re-tuned for a light canvas. Accents are
+   darkened one step (orange-700 / teal-700) so text and button labels
+   keep AA contrast on white surfaces. Semantic aliases (border, glass)
+   derive from these automatically via color-mix, so only the six base
+   colors and the shadows need overriding. */
+:root[data-theme='light'] {
+  --color-background: #f6f4ef;
+  --color-surface: #ffffff;
+  --color-primary: #c2410c;
+  --color-secondary: #0f766e;
+  --color-text: #101c2c;
+  --color-muted: #4b5b70;
+
+  --shadow-card: 0 8px 30px -12px color-mix(in srgb, #0b1524 25%, transparent);
+  --shadow-card-hover: 0 16px 40px -12px color-mix(in srgb, #0b1524 32%, transparent);
+}
+
 /* Respect prefers-reduced-motion globally at the token level */
 @media (prefers-reduced-motion: reduce) {
   :root {

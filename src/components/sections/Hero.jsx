@@ -6,6 +6,7 @@ import Button from '@/components/ui/Button'
 import Avatar from '@/components/ui/Avatar'
 import { useTypewriter } from '@/hooks/useTypewriter'
 import { useLenisContext } from '@/lib/LenisContext'
+import { useTheme } from '@/lib/ThemeContext'
 import { fadeUp, staggerContainer, EASE_PREMIUM } from '@/lib/motion'
 import { SOCIAL_LINKS, PROFILE_PHOTO_SRC } from '@/data/social'
 
@@ -25,6 +26,7 @@ function Hero() {
   const typedRole = useTypewriter(ROLES)
   const prefersReducedMotion = useReducedMotion()
   const { scrollToSection } = useLenisContext()
+  const { theme } = useTheme()
 
   return (
     <section
@@ -103,7 +105,7 @@ function Hero() {
           <div className="relative flex h-[320px] w-[320px] items-center justify-center sm:h-[400px] sm:w-[400px]">
             <div className="absolute inset-0">
               <Suspense fallback={null}>
-                <HeroScene reducedMotion={Boolean(prefersReducedMotion)} />
+                <HeroScene reducedMotion={Boolean(prefersReducedMotion)} theme={theme} />
               </Suspense>
             </div>
             <Avatar
